@@ -89,15 +89,15 @@ ggplot() + geom_boxplot(mapping = aes(y=Invested_return))
 
 
 # Create profit for portfolio
-Profit <- Invested_return*Portfolio_value_to_invest
+Financial_result <- Invested_return*Portfolio_value_to_invest
 
 # Calculate final VaR
-VaR <- qnorm(0.05, mean(Profit), sd(Profit))
+VaR <- qnorm(0.05, mean(Financial_result), sd(Financial_result))
 
 # GGplot -> VaR + additional histogram to show the data frequency accross distribution
-ggplot(mapping = aes(x = Profit)) + ggtitle("Value at Risk") + geom_histogram(aes(y =..density..), binwidth = 1000, colour='black', fill='lightgray', lwd=0.85)+
+ggplot(mapping = aes(x = Financial_result)) + ggtitle("Value at Risk") + geom_histogram(aes(y =..density..), binwidth = 1000, colour='black', fill='lightgray', lwd=0.85)+
   geom_density(color='darkblue', lwd=1.35) +
   geom_vline(xintercept = VaR, color = "red", linetype = "dashed", lwd=1.4)
 
 # Expected Shortfall calculation
-Expected_Shortfall <- mean(Profit[Profit < VaR])
+Expected_Shortfall <- mean(Financial_result[Financial_result < VaR])
