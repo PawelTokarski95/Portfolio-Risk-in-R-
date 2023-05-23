@@ -5,32 +5,32 @@ library(PerformanceAnalytics)
 library(ggplot2)
 
 
-# Define function to calculate volatility of a stock
+# I am defining function to calculate volatility of a stock
 Volatility_stock_market <- function(x) {
   rR = diff(x)
   return(abs(mean(rR, na.rm=TRUE))/sd(rR, na.rm=TRUE))
 }
 
-# Define ETF and stock tickers
+# I am defining ETF and stock tickers
 stock_ETF <- c('XWD.TO', 'EEM')
 
 
 
-# Get data for ETFs
+# I am downloading data for ETFs
 for(i in 1:length(stock_ETF)) {
   getSymbols(stock_ETF[[i]], src='yahoo', from=Sys.Date()-365*3, to=Sys.Date())
 }
 
 
 
-# Calculate volatility for ETFs
+# I am calculating volatility for ETFs
 Volatility_stock_market(XWD.TO$XWD.TO.Close)
 Volatility_stock_market(EEM$EEM.Close)
 
 #It seems that the Developed countries stocks are more profitable ones, so I get tickers for US.
 stock_tickers <- c("META", "MSFT", "GOOGL", "WMT", "AMZN", "TSLA", "XOM", "KO", "ORCL", "DIS", "NKE", "ADBE", "MA")
 
-# Get data for stocks
+# I am downloading data for stocks
 i = 1
 for(i in 1:length(stock_tickers)) {
   as.data.frame(getSymbols.yahoo(stock_tickers[[i]],  env=globalenv(), from=Sys.Date()-365*3, to=Sys.Date()), periodicity='weekly')
@@ -49,38 +49,38 @@ for(i in 1:length(stock_tickers)) {
 Stocks_weekly <- do.call(cbind, Stocks_weekly)
 colnames(Stocks_weekly) <- stock_tickers
 
-# Calculate volatility for stocks
+# I am calculating volatility for stocks
 volatilities <- c()
 i = 1
 for(i in 1:length(stock_tickers)) {
   volatilities[i] <- Volatility_stock_market(Stocks[,i])
 }
-# Calculate return on investment (ROI)
+# I am calculating return on investment (ROI)
 rR <- na.omit(ROC(Stocks_weekly))
 
-# Create portfolio with stock names
+# I am calculating portfolio with stock names
 portf <- portfolio.spec(colnames(rR))
 
 
-# Add constraints to portfolio
+# I am adding constraints to portfolio
 portf <- add.constraint(portf, type = 'weight_sum', min_sum=1, max_sum=1)
 portf <- add.constraint(portf, type = 'box', min=0.0, max=0.2)
 
-# Add objectives to portfolio
+# I am adding objectives to portfolio
 portf <- add.objective(portf, type='return', name = 'mean')
 portf <- add.objective(portf, type='risk', name = 'StdDev')
 
-# Optimize portfolio using ROI method
+# I am optimizing portfolio using ROI method
 optim <- optimize.portfolio(rR, portf, optimize_method='ROI', trace=TRUE)
 
 # Example portfolio amount
 Portfolio_value_to_invest <- 100000
 
 
-# Define the optimal weights for the specific portfolio
+# I am defining the optimal weights for the specific portfolio
 Invested_return <- optim$weights%*%t(as.matrix(rR))
 
-# Check if the data is properly distributed, so there would not be a problem with normal distribution plot
+# I am checking if the data is properly distributed, so there would not be a problem with normal distribution plot
 median(Invested_return)
 mean(Invested_return)
 max(Invested_return)
@@ -90,10 +90,10 @@ min(Invested_return)
 ggplot() + geom_boxplot(mapping = aes(y=Invested_return))
 
 
-# Create profit for portfolio
+# I am creating profit for portfolio
 Financial_result <- Invested_return*Portfolio_value_to_invest
 
-# Calculate final VaR
+# I am calcuting final VaR
 VaR <- qnorm(0.05, mean(Financial_result), sd(Financial_result))
 
 # GGplot -> VaR + additional histogram to show the data frequency accross distribution
