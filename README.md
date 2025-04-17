@@ -1,4 +1,4 @@
-
+#PORTFOLIO RISK IN R
 The project's objective was to create a diversified investment portfolio using stocks from different companies and industries. Its risk level was to be analyzed, with a focus on identifying markets (developed or emerging) with lower risks and suitable for investment.
 To achieve this goal, I studied ETFs that measure market indices. Of course, the macroeconomic situation was also taken into account (2022).
 
